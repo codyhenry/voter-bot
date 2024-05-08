@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Radio Button Clicker",
+  "version": "1.0",
+  "description": "Automatically clicks a radio button on a webpage.",
+  "permissions": ["activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": [
+        "https://highschool.athlonsports.com/florida/2024/05/07/vote-now-who-is-the-2024-softball-player-of-the-year-in-south-florida"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
