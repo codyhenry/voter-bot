@@ -1,5 +1,7 @@
-// Function to click the button with the label containing the text "Christina"
 console.log("Loaded");
+let count = 0;
+//! prevents client JS from executing
+/*
 function sleep(ms) {
   console.log("Sleeping");
   var start = new Date().getTime();
@@ -9,14 +11,49 @@ function sleep(ms) {
   }
   console.log("Awake");
 }
-
+*/
 // !chrome extensions cannot click anchor tags
+/*
 function clickBackBtn() {
   console.log("Going back");
   const box = document.querySelector(".pds-box");
   var backBtn = box.getElementsByTagName("a");
   console.log(backBtn);
   backBtn[0].click();
+}
+*/
+
+// chrome.storage.local.set({ localCounter: 0 }, function () {}); // save it in local.
+function getCurrentCount(callback) {
+  chrome.runtime.sendMessage({ permission: "get" }, function (response) {
+    callback(response);
+  });
+}
+
+function getCounter() {
+  getCurrentCount(function (counter) {
+    count = counter;
+  });
+}
+
+function incrementCounter() {
+  console.log("called increment");
+  chrome.runtime.sendMessage({ permission: "increment" }, function (response) {
+    console.log(response);
+  });
+}
+
+function resetCounter() {
+  chrome.runtime.sendMessage({ permission: "reset" });
+}
+
+function closeOldTab() {
+  chrome.runtime.sendMessage({ permission: "close" });
+}
+
+function createNewTab() {
+  console.log("Creating new tab");
+  chrome.runtime.sendMessage({ permission: "create" });
 }
 
 function scrollToPoll() {
@@ -29,7 +66,7 @@ function refreshPage() {
   window.scrollTo(0, 0);
 }
 
-function clickSubmitBtn() {
+function clickSubmitButton() {
   const subBtn = document.getElementById("pd-vote-button13733579");
   subBtn.click();
   console.log("Submitted");
@@ -39,13 +76,11 @@ function clickButtonWithLabelContainingText() {
   // Find all buttons on the page
   const options = document.querySelectorAll('input[type="radio"]');
 
-  // console.log(options);
   for (let option of options) {
     if (
       option.parentNode.parentNode.textContent ==
       "Christina D’Agostino, St. Thomas Aquinas"
     ) {
-      // console.log(option.parentNode.parentNode.textContent);
       option.click();
       console.log("Voted");
       return;
@@ -54,7 +89,7 @@ function clickButtonWithLabelContainingText() {
 }
 
 const startProcess = async () => {
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < 10; i++) {
     setTimeout(
       (function (i) {
         return function () {
@@ -63,9 +98,23 @@ const startProcess = async () => {
           } else if (i == 1) {
             clickButtonWithLabelContainingText();
           } else if (i == 2) {
-            clickSubmitBtn();
-          } else {
+            console.log("submitting");
+            clickSubmitButton();
+          } else if (i == 6) {
+            getCounter();
+            console.log(count);
+            if (count == 10) {
+              createNewTab();
+            }
+          } else if (i == 9) {
+            if (count == 10) {
+              resetCounter();
+              closeOldTab();
+            }
+            console.log("refreshing");
             refreshPage();
+          } else {
+            console.log("waiting extra time");
           }
         };
       })(i),
@@ -74,23 +123,11 @@ const startProcess = async () => {
   }
 };
 
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//   if (request.action === "start") {
-//     itr = 0;
-//     while (itr < 2) {
-//       console.log("This is iteration " + itr);
-//       startProcess();
-//       sendResponse({ message: "Start Clicking." });
-//       itr++;
-//     }
-//   } else if (request.action === "stop") {
-//     document.documentElement.style.filter = "none";
-//     sendResponse({ message: "Stop Clicking." });
-//   }
-// });
-
 window.onload = function () {
+  incrementCounter();
+  getCounter();
   startProcess();
 };
 
 // chrome://extensions/
+// https://highschool.athlonsports.com/florida/2024/05/07/vote-now-who-is-the-2024-softball-player-of-the-year-in-south-florida
