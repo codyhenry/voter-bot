@@ -11,7 +11,8 @@
     {
       "all_frames": true,
       "matches": [
-        "https://highschool.athlonsports.com/florida/2024/05/07/vote-now-who-is-the-2024-softball-player-of-the-year-in-south-florida"
+        "https://highschool.athlonsports.com/florida/2024/05/07/vote-now-who-is-the-2024-softball-player-of-the-year-in-south-florida",
+        "https://www.google.com/"
       ],
       "js": ["content.js"],
       "run_at": "document_start"

@@ -1,5 +1,6 @@
 console.log("Loaded");
 let count = 1;
+let active = true;
 //! prevents client JS from executing
 /*
 function sleep(ms) {
@@ -45,6 +46,10 @@ function incrementCounter() {
 
 function resetCounter() {
   chrome.runtime.sendMessage({ permission: "reset" });
+}
+
+function restartProcess() {
+  chrome.runtime.sendMessage({ permission: "restart" });
 }
 
 function closeOldTab() {
@@ -97,36 +102,41 @@ function clickButtonWithLabelContainingText() {
 }
 
 const startProcess = async () => {
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < 8; i++) {
     setTimeout(
       (function (i) {
         return function () {
+          if (29 < count < 78) {
+            active = false;
+          } else {
+            active = true;
+          }
           if (i == 0) {
-            scrollToPoll();
+            active && scrollToPoll();
           } else if (i == 1) {
-            clickButtonWithLabelContainingText();
+            active && clickButtonWithLabelContainingText();
           } else if (i == 2) {
             console.log("submitting");
-            clickSubmitButton();
-          } else if (i == 6) {
+            active && clickSubmitButton();
+          } else if (i == 4) {
             getCounter();
             console.log(count);
             if (count % 10 == 0) {
-              createNewTab();
-            }
-          } else if (i == 7) {
-            if (count == 31) {
-              resetCounter();
+              active && createNewTab();
+            } else if (count == 29) {
               createNewWindow();
+            } else if (count == 79) {
+              resetCounter();
+              restartProcess();
             }
-          } else if (i == 9) {
+          } else if (i == 6) {
             if (count % 10 == 0) {
-              closeOldTab();
-            } else if (count == 31) {
+              active && closeOldTab();
+            } else if (count == 29) {
               closeOldWindow();
             }
             console.log("refreshing");
-            refreshPage();
+            active && refreshPage();
           } else {
             console.log("waiting extra time");
           }

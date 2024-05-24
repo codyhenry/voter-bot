@@ -26,8 +26,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   } else if (request.permission === "instantiate") {
     chrome.windows.create(
       {
+        url: "https://www.google.com/",
         focused: false,
-        url: "https://highschool.athlonsports.com/florida/2024/05/07/vote-now-who-is-the-2024-softball-player-of-the-year-in-south-florida",
       },
       function (window) {
         windowId = window.id;
@@ -37,11 +37,18 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.windows.getLastFocused(function (window) {
       chrome.windows.remove(window.id);
       chrome.windows.update(windowId, { state: "maximized", focused: true });
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        //'tabs' will be an array with only one element: an Object describing the active tab
-        //  in the current window. To remove the tab, pass the ID: to chrome.tabs.remove().
-        chrome.tabs.update(tabs[0].id, { selected: true });
-      });
+    });
+  } else if (request.permission === "restart") {
+    chrome.tabs.create({
+      url: "https://highschool.athlonsports.com/florida/2024/05/07/vote-now-who-is-the-2024-softball-player-of-the-year-in-south-florida",
+      active: false,
+      index: 1,
+    });
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      //'tabs' will be an array with only one element: an Object describing the active tab
+      //  in the current window. To remove the tab, pass the ID: to chrome.tabs.remove().
+      chrome.tabs.remove(tabs[0].id);
+      chrome.tabs.update(tabs[0].id, { selected: true });
     });
   }
   // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
