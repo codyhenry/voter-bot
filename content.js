@@ -94,7 +94,9 @@ function clickButtonWithLabelContainingText() {
       option.parentNode.parentNode.textContent ==
       "Christina D’Agostino, St. Thomas Aquinas"
     ) {
-      option.click();
+      while (!option.checked) {
+        option.click();
+      }
       console.log("Voted");
       return;
     }
@@ -102,7 +104,7 @@ function clickButtonWithLabelContainingText() {
 }
 
 const startProcess = async () => {
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < 9; i++) {
     setTimeout(
       (function (i) {
         return function () {
@@ -112,10 +114,11 @@ const startProcess = async () => {
           } else {
             active = true;
           }
-          console.log("Active = " + active);
+          console.log("itr " + i);
           if (i == 0) {
             active && scrollToPoll();
           } else if (i == 1) {
+            console.log("Finding radio");
             active && clickButtonWithLabelContainingText();
           } else if (i == 2) {
             console.log("submitting");
@@ -138,13 +141,13 @@ const startProcess = async () => {
               closeOldWindow();
             }
             console.log("refreshing");
-            active && refreshPage();
+            refreshPage();
           } else {
             console.log("waiting extra time");
           }
         };
       })(i),
-      i * 1500
+      i * 1500 + Math.random() * 500
     );
   }
 };
