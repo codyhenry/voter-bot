@@ -104,7 +104,7 @@ function clickButtonWithLabelContainingText() {
 }
 
 const startProcess = async () => {
-  for (var i = 0; i < 9; i++) {
+  for (var i = 0; i < 10; i++) {
     setTimeout(
       (function (i) {
         return function () {
@@ -115,15 +115,15 @@ const startProcess = async () => {
             active = true;
           }
           console.log("itr " + i);
-          if (i == 0) {
+          if (i == 2) {
             active && scrollToPoll();
-          } else if (i == 1) {
+          } else if (i == 3) {
             console.log("Finding radio");
             active && clickButtonWithLabelContainingText();
-          } else if (i == 2) {
+          } else if (i == 4) {
             console.log("submitting");
             active && clickSubmitButton();
-          } else if (i == 4) {
+          } else if (i == 6) {
             getCounter();
             console.log(count);
             if (count % 10 == 0) {
@@ -134,7 +134,7 @@ const startProcess = async () => {
               resetCounter();
               restartProcess();
             }
-          } else if (i == 6) {
+          } else if (i == 8) {
             if (count % 10 == 0) {
               active && closeOldTab();
             } else if (count == 29) {
@@ -147,7 +147,7 @@ const startProcess = async () => {
           }
         };
       })(i),
-      i * 1500 + Math.random() * 500
+      i * 1700 + Math.random() * 300
     );
   }
 };
