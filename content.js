@@ -1,5 +1,5 @@
 console.log("Loaded");
-let count = 0;
+let count = 1;
 //! prevents client JS from executing
 /*
 function sleep(ms) {
@@ -49,6 +49,14 @@ function resetCounter() {
 
 function closeOldTab() {
   chrome.runtime.sendMessage({ permission: "close" });
+}
+
+function closeOldWindow() {
+  chrome.runtime.sendMessage({ permission: "terminate" });
+}
+
+function createNewWindow() {
+  chrome.runtime.sendMessage({ permission: "instantiate" });
 }
 
 function createNewTab() {
@@ -103,13 +111,19 @@ const startProcess = async () => {
           } else if (i == 6) {
             getCounter();
             console.log(count);
-            if (count == 10) {
+            if (count % 10 == 0) {
               createNewTab();
             }
-          } else if (i == 9) {
-            if (count == 10) {
+          } else if (i == 7) {
+            if (count == 31) {
               resetCounter();
+              createNewWindow();
+            }
+          } else if (i == 9) {
+            if (count % 10 == 0) {
               closeOldTab();
+            } else if (count == 31) {
+              closeOldWindow();
             }
             console.log("refreshing");
             refreshPage();
