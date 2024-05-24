@@ -106,11 +106,13 @@ const startProcess = async () => {
     setTimeout(
       (function (i) {
         return function () {
-          if (29 < count < 78) {
+          if (count > 29 && count < 78) {
+            console.log("Count out of bounds at " + count);
             active = false;
           } else {
             active = true;
           }
+          console.log("Active = " + active);
           if (i == 0) {
             active && scrollToPoll();
           } else if (i == 1) {
